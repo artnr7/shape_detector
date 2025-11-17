@@ -5,6 +5,9 @@ endif
 
 .PHONY: all install f clang_f cmake_f
 
+
+default: r
+
 DATASETS := ../dataset
 
 install: 
@@ -18,7 +21,7 @@ run:
 # 	@./install_d/shape_detector $(DATASETS)/pedestrian.jpg
 	@./install_d/shape_detector $(DATASETS)/stop.jpg
 
-r: install run
+r: f install run
 
 del:
 	@rm -rf build .cache

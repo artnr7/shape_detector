@@ -9,12 +9,12 @@ include(cmake/config.cmake)
 set(SHAPE_DETECTOR_APP shape_detector)
 set(RUN_SHAPE_DETECTOR_APP run_${SHAPE_DETECTOR_APP})
 
-set(SHAPE_DETECTOR_SRC shape_detector.cc)
+set(SHAPE_DETECTOR_SRC shape_detector.cc utils.cc shape_detector.hpp)
 
 add_executable(${SHAPE_DETECTOR_APP} ${SHAPE_DETECTOR_SRC})
 
 set_target_properties(${SHAPE_DETECTOR_APP} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
-  "${INSTALL_DIR}")
+                                                       "${INSTALL_DIR}")
 
 target_compile_options(${SHAPE_DETECTOR_APP} PRIVATE -Wall -Werror -Wextra)
 
