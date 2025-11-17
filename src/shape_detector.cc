@@ -1,5 +1,7 @@
 #include "shape_detector.hpp"
 
+#include <opencv2/core/hal/interface.h>
+
 #include <cstddef>
 #include <opencv2/core.hpp>
 #include <opencv2/core/matx.hpp>
@@ -42,17 +44,20 @@ int main(int argc, char** argv) {
   int s_min = 0, s_max = 0;
   int v_min = 0, v_max = 0;
 
+  sd::ChangeTrackbarsValues(h_min, h_max, s_min, s_max, v_min, v_max);
   sd::CreateTrackbars(channels, h_win, s_win, v_win, h_min, h_max, s_min, s_max,
                       v_min, v_max);
+  // std::cout << h_min << " " << h_max << " " << s_min << " " << s_max << " "
+  //           << v_min << " " << v_max << " " << std::endl;
 
   std::vector<cv::Mat> channels_ranged;
   for (size_t i = 0; i < channels.size(); ++i) {
     channels_ranged.push_back({});
   }
 
-  std::string edges_win{"Canny edges"};
-  cv::namedWindow(edges_win, cv::WINDOW_NORMAL);
-  cv::resizeWindow(edges_win, MAIN_WIN_W, MAIN_WIN_H);
+  // std::string edges_win{"Canny edges"};
+  // cv::namedWindow(edges_win, cv::WINDOW_NORMAL);
+  // cv::resizeWindow(edges_win, MAIN_WIN_W, MAIN_WIN_H);
 
   std::string hsv_bin_edges_img_sum_win{"Edges and channels"};
   cv::namedWindow(hsv_bin_edges_img_sum_win, cv::WINDOW_NORMAL);
@@ -71,8 +76,9 @@ int main(int argc, char** argv) {
     sd::ShowImages(main_win, h_win, s_win, v_win, hsv_bin_sum, channels_ranged);
     // ------------
 
-    cv::imshow(edges_win, edges_img);
-    cv::moveWindow(edges_win, MAIN_WIN_X + MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+    // cv::imshow(edges_win, edges_img);
+    // cv::moveWindow(edges_win, MAIN_WIN_X + MAIN_WIN_W + BORDER_X,
+    // MAIN_WIN_Y);
 
     // ------------
     cv::Mat hsv_bin_edges_img_sum;
@@ -83,19 +89,22 @@ int main(int argc, char** argv) {
     // ------------
 
     std::vector<std::vector<cv::Point>> contours;
+    // contours.clear();
     std::vector<cv::Vec4i> hierarchy;
 
     cv::findContours(hsv_bin_edges_img_sum, contours, hierarchy,
                      cv::RETR_EXTERNAL, cv::CHAIN_APPROX_SIMPLE);
 
+    cv::Mat img_copy;
+    img.copyTo(img_copy);
     for (size_t i = 0; i < contours.size(); i++) {
-      cv::drawContours(img, contours, static_cast<int>(i),
-                       cv::Scalar(120, 255, 255), 2, cv::LINE_8, hierarchy, 0);
+      cv::drawContours(img_copy, contours, static_cast<int>(i),
+                       cv::Scalar(0, 0, 255), 20, cv::LINE_8, hierarchy, 0);
     }
 
-    cv::imshow(img_win, img);
-    cv::moveWindow(img_win, MAIN_WIN_X + 3 * MAIN_WIN_W + BORDER_X,
-                   MAIN_WIN_Y + 100);
+    cv::imshow(img_win, img_copy);
+    // cv::moveWindow(img_win, MAIN_WIN_X + 3 * MAIN_WIN_W + BORDER_X,
+    //  MAIN_WIN_Y + 100);
 
     sd::MoveWindows(main_win, h_win, s_win, v_win);
 

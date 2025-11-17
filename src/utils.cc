@@ -64,24 +64,34 @@ void sd::CreateTrackbars(const std::vector<cv::Mat> &channels,
   double min = 0, max = 0;
 
   cv::minMaxLoc(channels[0], &min, &max);
-  h_min = min;
-  h_max = max;
+  // h_min = min;
+  // h_max = max;
   cv::createTrackbar("Hmin", h_win, &h_min, h_maxv);
   cv::createTrackbar("Hmax", h_win, &h_max, h_maxv);
 
   cv::minMaxLoc(channels[1], &min, &max);
 
-  s_min = min;
-  s_max = max;
+  // s_min = min;
+  // s_max = max;
   cv::createTrackbar("Smin", s_win, &s_min, sv_max);
   cv::createTrackbar("Smax", s_win, &s_max, sv_max);
 
   cv::minMaxLoc(channels[2], &min, &max);
 
-  v_min = min;
-  v_max = max;
+  // v_min = min;
+  // v_max = max;
   cv::createTrackbar("Vmin", v_win, &v_min, sv_max);
   cv::createTrackbar("Vmax", v_win, &v_max, sv_max);
+}
+
+void sd::ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
+                               int &v_min, int &v_max) {
+  h_min = 165;
+  h_max = 179;
+  s_min = 50;
+  s_max = 255;
+  v_min = 65;
+  v_max = 188;
 }
 
 void sd::ShowImages(const std::string &main_win, const std::string &h_win,
@@ -104,7 +114,7 @@ void sd::ChannelsInRange(const std::vector<cv::Mat> &channels,
 }
 
 void sd::ChannelsSum(cv::Mat &hsv_bin_sum,
-                 const std::vector<cv::Mat> channels_ranged) {
+                     const std::vector<cv::Mat> channels_ranged) {
   cv::bitwise_and(channels_ranged[0], channels_ranged[1], hsv_bin_sum);
   cv::bitwise_and(channels_ranged[2], hsv_bin_sum, hsv_bin_sum);
 }

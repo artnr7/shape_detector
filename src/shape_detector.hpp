@@ -49,6 +49,9 @@ void CreateTrackbars(const std::vector<cv::Mat> &channels,
                      const std::string &v_win, int &h_min, int &h_max,
                      int &s_min, int &s_max, int &v_min, int &v_max);
 
+void ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
+                           int &v_min, int &v_max);
+
 void ShowImages(const std::string &main_win, const std::string &h_win,
                 const std::string &s_win, const std::string &v_win,
                 cv::Mat &hsv_img, const std::vector<cv::Mat> &channels);
