@@ -8,15 +8,17 @@ namespace sd {
 
 #define MAIN_WIN_W (16 * DEF_WIN_MULT * 2)
 #define MAIN_WIN_H (9 * DEF_WIN_MULT * 2)
-#define H_WIN_W (16 * DEF_WIN_MULT)
-#define H_WIN_H (9 * DEF_WIN_MULT)
-#define S_WIN_W (16 * DEF_WIN_MULT)
-#define S_WIN_H (9 * DEF_WIN_MULT)
-#define V_WIN_W (16 * DEF_WIN_MULT)
-#define V_WIN_H (9 * DEF_WIN_MULT)
+#define UTIL_WIN_W (MAIN_WIN_W / 2)
+#define UTIL_WIN_H (MAIN_WIN_H / 2)
+#define H_WIN_W UTIL_WIN_W
+#define H_WIN_H UTIL_WIN_H
+#define S_WIN_W UTIL_WIN_W
+#define S_WIN_H UTIL_WIN_H
+#define V_WIN_W UTIL_WIN_W
+#define V_WIN_H UTIL_WIN_H
 
 #define MAIN_WIN_X 50
-#define MAIN_WIN_Y 50
+#define MAIN_WIN_Y 100
 
 #define UTIL_WIN_X MAIN_WIN_X
 #define UTIL_WIN_Y (MAIN_WIN_Y + MAIN_WIN_H + BORDER_Y)
@@ -30,8 +32,27 @@ namespace sd {
 #define V_WIN_X (S_WIN_X + S_WIN_W + BORDER_X)
 #define V_WIN_Y UTIL_WIN_Y
 
-void MoveWindows(const std::string &main_w, const std::string &h_w,
-                 const std::string &s_w, const std::string &v_w);
+void ResizeWindows(const std::string &main_win, const std::string &h_win,
+                   const std::string &s_win, const std::string &v_win,
+                   const std::string &hsv_chnls_sum_win,
+                   const std::string &edges_win,
+                   const std::string &hsv_chnls_and_edges_sum_win);
+
+void ShowImages(const std::string &main_win, const cv::Mat &sign_detect_res_img,
+                const std::string &h_win, const std::string &s_win,
+                const std::string &v_win,
+                const std::vector<cv::Mat> channels_ranged,
+                const std::string &hsv_chnls_sum_win,
+                const cv::Mat &hsv_chnls_sum_img, const std::string &edges_win,
+                const cv::Mat &edges_img,
+                const std::string &hsv_chnls_and_edges_sum_win,
+                const cv::Mat &hsv_chnls_and_edges_sum_img);
+
+void MoveWindows(const std::string &main_win, const std::string &h_win,
+                 const std::string &s_win, const std::string &v_win,
+                 const std::string &hsv_chnls_sum_win,
+                 const std::string &edges_win,
+                 const std::string &hsv_chnls_and_edges_sum_win);
 
 void SetParams(cv::SimpleBlobDetector::Params &params);
 
@@ -41,9 +62,6 @@ void ImgReadFirstFile(const char **argv, cv::Mat &img,
 #define PAUSE 50  // milliseconds
 bool MainCycleState();
 
-void ResizeWindows(const std::string &main_win, const std::string &h_w,
-                   const std::string &s_w, const std::string &v_w);
-
 void CreateTrackbars(const std::vector<cv::Mat> &channels,
                      const std::string &h_win, const std::string &s_win,
                      const std::string &v_win, int &h_min, int &h_max,
@@ -52,14 +70,17 @@ void CreateTrackbars(const std::vector<cv::Mat> &channels,
 void ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
                            int &v_min, int &v_max);
 
-void ShowImages(const std::string &main_win, const std::string &h_win,
-                const std::string &s_win, const std::string &v_win,
-                cv::Mat &hsv_img, const std::vector<cv::Mat> &channels);
-
 void ChannelsInRange(const std::vector<cv::Mat> &channels,
                      std::vector<cv::Mat> &channels_ranged, int h_min,
                      int h_max, int s_min, int s_max, int v_min, int v_max);
 
 void ChannelsSum(cv::Mat &hsv_bin_sum,
                  const std::vector<cv::Mat> channels_ranged);
+void MakeWindows(const std::string &h_win, const std::string &s_win,
+                 const std::string &v_win);
+
+void FindAndDrawContours(const cv::Mat &find_src, const cv::Mat &img,
+                         cv::Mat &img_copy);
+void ChannelsRangedCreate(const std::vector<cv::Mat> &channels,
+                          std::vector<cv::Mat> &channels_ranged);
 }  // namespace sd

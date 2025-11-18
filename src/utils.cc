@@ -1,23 +1,115 @@
+#include <opencv2/highgui.hpp>
+#include <string>
 #include <vector>
 
 #include "shape_detector.hpp"
 
 void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
-                       const std::string &s_win, const std::string &v_win) {
+                       const std::string &s_win, const std::string &v_win,
+                       const std::string &hsv_chnls_sum_win,
+                       const std::string &edges_win,
+                       const std::string &hsv_chnls_and_edges_sum_win) {
   cv::resizeWindow(main_win, MAIN_WIN_W, MAIN_WIN_H);
 
-  cv::resizeWindow(h_win, H_WIN_W, H_WIN_H);
-  cv::resizeWindow(s_win, S_WIN_W, S_WIN_H);
-  cv::resizeWindow(v_win, V_WIN_W, V_WIN_H);
+  // cv::resizeWindow(h_win, H_WIN_W, H_WIN_H);
+  // cv::resizeWindow(s_win, S_WIN_W, S_WIN_H);
+  // cv::resizeWindow(v_win, V_WIN_W, V_WIN_H);
+
+  cv::resizeWindow(hsv_chnls_sum_win, MAIN_WIN_W, MAIN_WIN_H);
+  cv::resizeWindow(edges_win, MAIN_WIN_W, MAIN_WIN_H);
+  // cv::resizeWindow(hsv_chnls_and_edges_sum_win, MAIN_WIN_W, MAIN_WIN_H);
+
+  // (void)main_win;
+  (void)h_win;
+  (void)s_win;
+  (void)v_win;
+  // (void)hsv_chnls_sum_win;
+  // (void)edges_win;
+  (void)hsv_chnls_and_edges_sum_win;
+}
+
+// Какую матрицу изображения где показывать
+void sd::ShowImages(const std::string &main_win,
+                    const cv::Mat &sign_detect_res_img,
+                    const std::string &h_win, const std::string &s_win,
+                    const std::string &v_win,
+                    const std::vector<cv::Mat> channels_ranged,
+                    const std::string &hsv_chnls_sum_win,
+                    const cv::Mat &hsv_chnls_sum_img,
+                    const std::string &edges_win, const cv::Mat &edges_img,
+                    const std::string &hsv_chnls_and_edges_sum_win,
+                    const cv::Mat &hsv_chnls_and_edges_sum_img) {
+  cv::imshow(main_win, sign_detect_res_img);
+
+  cv::imshow(h_win, channels_ranged[0]);
+  cv::imshow(s_win, channels_ranged[1]);
+  cv::imshow(v_win, channels_ranged[2]);
+
+  cv::imshow(hsv_chnls_sum_win, hsv_chnls_sum_img);
+  cv::imshow(edges_win, edges_img);
+  cv::imshow(hsv_chnls_and_edges_sum_win, hsv_chnls_and_edges_sum_img);
+
+  // (void)main_win;
+  // (void)sign_detect_res_img;
+  // (void)h_win;
+  // (void)s_win;
+  // (void)v_win;
+  // (void)channels_ranged;
+  // (void)hsv_chnls_sum_win;
+  // (void)hsv_chnls_sum_img;
+  // (void)edges_win;
+  // (void)edges_img;
+  // (void)hsv_chnls_and_edges_sum_win;
+  // (void)hsv_chnls_and_edges_sum_img;
 }
 
 void sd::MoveWindows(const std::string &main_win, const std::string &h_win,
-                     const std::string &s_win, const std::string &v_win) {
+                     const std::string &s_win, const std::string &v_win,
+                     const std::string &hsv_chnls_sum_win,
+                     const std::string &edges_win,
+                     const std::string &hsv_chnls_and_edges_sum_win) {
   cv::moveWindow(main_win, MAIN_WIN_X, MAIN_WIN_Y);
 
-  cv::moveWindow(h_win, H_WIN_X, H_WIN_Y);
-  cv::moveWindow(s_win, S_WIN_X, S_WIN_Y);
-  cv::moveWindow(v_win, V_WIN_X, V_WIN_Y);
+  // cv::moveWindow(h_win, H_WIN_X, H_WIN_Y);
+  // cv::moveWindow(s_win, S_WIN_X, S_WIN_Y);
+  // cv::moveWindow(v_win, V_WIN_X, V_WIN_Y);
+
+  // cv::moveWindow(hsv_chnls_sum_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X,
+  //                MAIN_WIN_Y);
+  // cv::moveWindow(edges_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+
+  // cv::moveWindow(hsv_chnls_and_edges_sum_win,
+  //                MAIN_WIN_X + MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+
+  // (void)main_win;
+  (void)h_win;
+  (void)s_win;
+  (void)v_win;
+  (void)hsv_chnls_sum_win;
+  (void)edges_win;
+  (void)hsv_chnls_and_edges_sum_win;
+}
+
+void sd::ChannelsInRange(const std::vector<cv::Mat> &channels,
+                         std::vector<cv::Mat> &channels_ranged, int h_min,
+                         int h_max, int s_min, int s_max, int v_min,
+                         int v_max) {
+  cv::inRange(channels[0], h_min, h_max, channels_ranged[0]);
+  cv::inRange(channels[1], s_min, s_max, channels_ranged[1]);
+  cv::inRange(channels[2], v_min, v_max, channels_ranged[2]);
+}
+
+void sd::ChannelsSum(cv::Mat &hsv_bin_sum,
+                     const std::vector<cv::Mat> channels_ranged) {
+  cv::bitwise_and(channels_ranged[0], channels_ranged[1], hsv_bin_sum);
+  cv::bitwise_and(channels_ranged[2], hsv_bin_sum, hsv_bin_sum);
+}
+
+void sd::MakeWindows(const std::string &h_win, const std::string &s_win,
+                     const std::string &v_win) {
+  cv::namedWindow(h_win, cv::WINDOW_NORMAL);
+  cv::namedWindow(s_win, cv::WINDOW_NORMAL);
+  cv::namedWindow(v_win, cv::WINDOW_NORMAL);
 }
 
 void sd::ImgReadFirstFile(const char **argv, cv::Mat &img,
@@ -88,33 +180,30 @@ void sd::ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
                                int &v_min, int &v_max) {
   h_min = 165;
   h_max = 179;
-  s_min = 50;
+  s_min = 90;
   s_max = 255;
   v_min = 65;
   v_max = 188;
 }
 
-void sd::ShowImages(const std::string &main_win, const std::string &h_win,
-                    const std::string &s_win, const std::string &v_win,
-                    cv::Mat &hsv_img, const std::vector<cv::Mat> &channels) {
-  cv::imshow(main_win, hsv_img);
+void sd::FindAndDrawContours(const cv::Mat &find_src, const cv::Mat &img,
+                             cv::Mat &img_copy) {
+  std::vector<std::vector<cv::Point>> contours;
+  std::vector<cv::Vec4i> hierarchy;
 
-  cv::imshow(h_win, channels[0]);
-  cv::imshow(s_win, channels[1]);
-  cv::imshow(v_win, channels[2]);
+  cv::findContours(find_src, contours, hierarchy, cv::RETR_EXTERNAL,
+                   cv::CHAIN_APPROX_SIMPLE);
+
+  img.copyTo(img_copy);
+  for (size_t i = 0; i < contours.size(); i++) {
+    cv::drawContours(img_copy, contours, static_cast<int>(i),
+                     cv::Scalar(0, 0, 255), 20, cv::LINE_8, hierarchy, 0);
+  }
 }
 
-void sd::ChannelsInRange(const std::vector<cv::Mat> &channels,
-                         std::vector<cv::Mat> &channels_ranged, int h_min,
-                         int h_max, int s_min, int s_max, int v_min,
-                         int v_max) {
-  cv::inRange(channels[0], h_min, h_max, channels_ranged[0]);
-  cv::inRange(channels[1], s_min, s_max, channels_ranged[1]);
-  cv::inRange(channels[2], v_min, v_max, channels_ranged[2]);
-}
-
-void sd::ChannelsSum(cv::Mat &hsv_bin_sum,
-                     const std::vector<cv::Mat> channels_ranged) {
-  cv::bitwise_and(channels_ranged[0], channels_ranged[1], hsv_bin_sum);
-  cv::bitwise_and(channels_ranged[2], hsv_bin_sum, hsv_bin_sum);
+void sd::ChannelsRangedCreate(const std::vector<cv::Mat> &channels,
+                              std::vector<cv::Mat> &channels_ranged) {
+  for (size_t i = 0; i < channels.size(); ++i) {
+    channels_ranged.push_back({});
+  }
 }
