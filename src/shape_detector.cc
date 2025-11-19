@@ -24,25 +24,15 @@ int main(int argc, char **argv) {
 
   // Windows
   std::string main_win{"Rawd Sign Detector"};
-  cv::namedWindow(main_win, cv::WINDOW_NORMAL);
-
   std::string h_win{"h channel"};
   std::string s_win{"s channel"};
   std::string v_win{"v channel"};
-
-  cv::namedWindow(h_win, cv::WINDOW_NORMAL);
-  cv::namedWindow(s_win, cv::WINDOW_NORMAL);
-  cv::namedWindow(v_win, cv::WINDOW_NORMAL);
-  // sd::MakeWindows(h_win, s_win, v_win);
-
   std::string hsv_chnls_sum_win{"Channels sum"};
-  cv::namedWindow(hsv_chnls_sum_win, cv::WINDOW_NORMAL);
-
   std::string edges_win{"Canny edges"};
-  cv::namedWindow(edges_win, cv::WINDOW_NORMAL);
-
   std::string hsv_chnls_and_edges_sum_win{"Edges and channels"};
-  cv::namedWindow(hsv_chnls_and_edges_sum_win, cv::WINDOW_NORMAL);
+
+  sd::MakeWindows(main_win, h_win, s_win, v_win, hsv_chnls_sum_win, edges_win,
+                  hsv_chnls_and_edges_sum_win);
 
   sd::ResizeWindows(main_win, h_win, s_win, v_win, hsv_chnls_sum_win, edges_win,
                     hsv_chnls_and_edges_sum_win);
@@ -84,8 +74,7 @@ int main(int argc, char **argv) {
                    edges_win, edges_img, hsv_chnls_and_edges_sum_win,
                    hsv_chnls_and_edges_sum_img);
 
-    // Unfortunatelly I shall move windows after their show proccess (evry
-    // time)
+    // Unfortunatelly I shall move windows after their show proccess(evry time)
 
     sd::MoveWindows(main_win, h_win, s_win, v_win, hsv_chnls_sum_win, edges_win,
                     hsv_chnls_and_edges_sum_win);

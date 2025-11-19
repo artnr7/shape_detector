@@ -76,9 +76,13 @@ void ChannelsInRange(const std::vector<cv::Mat> &channels,
 
 void ChannelsSum(cv::Mat &hsv_bin_sum,
                  const std::vector<cv::Mat> channels_ranged);
-void MakeWindows(const std::string &h_win, const std::string &s_win,
-                 const std::string &v_win);
 
+void MakeWindows(const std::string &main_win, const std::string &h_win,
+                 const std::string &s_win, const std::string &v_win,
+                 const std::string &hsv_chnls_sum_win,
+                 const std::string &edges_win,
+                 const std::string &hsv_chnls_and_edges_sum_win);
+                 
 void FindAndDrawContours(const cv::Mat &find_src, const cv::Mat &img,
                          cv::Mat &img_copy);
 void ChannelsRangedCreate(const std::vector<cv::Mat> &channels,

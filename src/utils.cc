@@ -4,6 +4,42 @@
 
 #include "shape_detector.hpp"
 
+void sd::MakeWindows(const std::string &main_win, const std::string &h_win,
+                     const std::string &s_win, const std::string &v_win,
+                     const std::string &hsv_chnls_sum_win,
+                     const std::string &edges_win,
+                     const std::string &hsv_chnls_and_edges_sum_win) {
+  cv::namedWindow(main_win, cv::WINDOW_NORMAL);
+
+  cv::namedWindow(h_win, cv::WINDOW_NORMAL);
+  cv::namedWindow(s_win, cv::WINDOW_NORMAL);
+  cv::namedWindow(v_win, cv::WINDOW_NORMAL);
+
+#ifdef HSV
+  cv::namedWindow(hsv_chnls_sum_win, cv::WINDOW_NORMAL);
+#endif
+
+#ifdef EDGES
+  cv::namedWindow(edges_win, cv::WINDOW_NORMAL);
+#endif
+
+#ifdef HSV_PLUS_EDGES
+  cv::namedWindow(hsv_chnls_and_edges_sum_win, cv::WINDOW_NORMAL);
+#endif
+
+#ifndef HSV
+  (void)hsv_chnls_sum_win;
+#endif
+
+#ifndef EDGES
+  (void)edges_win;
+#endif
+
+#ifndef HSV_PLUS_EDGES
+  (void)hsv_chnls_and_edges_sum_win;
+#endif
+}
+
 void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
                        const std::string &s_win, const std::string &v_win,
                        const std::string &hsv_chnls_sum_win,
@@ -11,21 +47,38 @@ void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
                        const std::string &hsv_chnls_and_edges_sum_win) {
   cv::resizeWindow(main_win, MAIN_WIN_W, MAIN_WIN_H);
 
-  // cv::resizeWindow(h_win, H_WIN_W, H_WIN_H);
-  // cv::resizeWindow(s_win, S_WIN_W, S_WIN_H);
-  // cv::resizeWindow(v_win, V_WIN_W, V_WIN_H);
+  cv::resizeWindow(h_win, H_WIN_W, H_WIN_H);
+  cv::resizeWindow(s_win, S_WIN_W, S_WIN_H);
+  cv::resizeWindow(v_win, V_WIN_W, V_WIN_H);
 
+#ifdef HSV
   cv::resizeWindow(hsv_chnls_sum_win, MAIN_WIN_W, MAIN_WIN_H);
+#endif
+
+#ifdef EDGES
+
   cv::resizeWindow(edges_win, MAIN_WIN_W, MAIN_WIN_H);
-  // cv::resizeWindow(hsv_chnls_and_edges_sum_win, MAIN_WIN_W, MAIN_WIN_H);
+#endif
+
+#ifdef HSV_PLUS_EDGES
+  cv::resizeWindow(hsv_chnls_and_edges_sum_win, MAIN_WIN_W, MAIN_WIN_H);
+#endif
 
   // (void)main_win;
-  (void)h_win;
-  (void)s_win;
-  (void)v_win;
-  // (void)hsv_chnls_sum_win;
-  // (void)edges_win;
+  // (void)h_win;
+  // (void)s_win;
+  // (void)v_win;
+#ifndef HSV
+  (void)hsv_chnls_sum_win;
+#endif
+
+#ifndef EDGES
+  (void)edges_win;
+#endif
+
+#ifndef HSV_PLUS_EDGES
   (void)hsv_chnls_and_edges_sum_win;
+#endif
 }
 
 // Какую матрицу изображения где показывать
@@ -45,9 +98,17 @@ void sd::ShowImages(const std::string &main_win,
   cv::imshow(s_win, channels_ranged[1]);
   cv::imshow(v_win, channels_ranged[2]);
 
+#ifdef HSV
   cv::imshow(hsv_chnls_sum_win, hsv_chnls_sum_img);
+#endif
+
+#ifdef EDGES
   cv::imshow(edges_win, edges_img);
+#endif
+
+#ifdef HSV_PLUS_EDGES
   cv::imshow(hsv_chnls_and_edges_sum_win, hsv_chnls_and_edges_sum_img);
+#endif
 
   // (void)main_win;
   // (void)sign_detect_res_img;
@@ -55,12 +116,21 @@ void sd::ShowImages(const std::string &main_win,
   // (void)s_win;
   // (void)v_win;
   // (void)channels_ranged;
-  // (void)hsv_chnls_sum_win;
-  // (void)hsv_chnls_sum_img;
-  // (void)edges_win;
-  // (void)edges_img;
-  // (void)hsv_chnls_and_edges_sum_win;
-  // (void)hsv_chnls_and_edges_sum_img;
+
+#ifndef HSV
+  (void)hsv_chnls_sum_win;
+  (void)hsv_chnls_sum_img;
+#endif
+
+#ifndef EDGES
+  (void)edges_win;
+  (void)edges_img;
+#endif
+
+#ifndef HSV_PLUS_EDGES
+  (void)hsv_chnls_and_edges_sum_win;
+  (void)hsv_chnls_and_edges_sum_img;
+#endif
 }
 
 void sd::MoveWindows(const std::string &main_win, const std::string &h_win,
@@ -70,23 +140,26 @@ void sd::MoveWindows(const std::string &main_win, const std::string &h_win,
                      const std::string &hsv_chnls_and_edges_sum_win) {
   cv::moveWindow(main_win, MAIN_WIN_X, MAIN_WIN_Y);
 
-  // cv::moveWindow(h_win, H_WIN_X, H_WIN_Y);
-  // cv::moveWindow(s_win, S_WIN_X, S_WIN_Y);
-  // cv::moveWindow(v_win, V_WIN_X, V_WIN_Y);
+  cv::moveWindow(h_win, H_WIN_X, H_WIN_Y);
+  cv::moveWindow(s_win, S_WIN_X, S_WIN_Y);
+  cv::moveWindow(v_win, V_WIN_X, V_WIN_Y);
 
-  // cv::moveWindow(hsv_chnls_sum_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X,
-  //                MAIN_WIN_Y);
-  // cv::moveWindow(edges_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
-
+// cv::moveWindow(hsv_chnls_sum_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X,
+//  MAIN_WIN_Y);
+#ifdef EDGES
+  cv::moveWindow(edges_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+#endif
   // cv::moveWindow(hsv_chnls_and_edges_sum_win,
-  //                MAIN_WIN_X + MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+  //  MAIN_WIN_X + MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
 
   // (void)main_win;
-  (void)h_win;
-  (void)s_win;
-  (void)v_win;
+  // (void)h_win;
+  // (void)s_win;
+  // (void)v_win;
   (void)hsv_chnls_sum_win;
+#ifndef EDGES
   (void)edges_win;
+#endif
   (void)hsv_chnls_and_edges_sum_win;
 }
 
@@ -103,13 +176,6 @@ void sd::ChannelsSum(cv::Mat &hsv_bin_sum,
                      const std::vector<cv::Mat> channels_ranged) {
   cv::bitwise_and(channels_ranged[0], channels_ranged[1], hsv_bin_sum);
   cv::bitwise_and(channels_ranged[2], hsv_bin_sum, hsv_bin_sum);
-}
-
-void sd::MakeWindows(const std::string &h_win, const std::string &s_win,
-                     const std::string &v_win) {
-  cv::namedWindow(h_win, cv::WINDOW_NORMAL);
-  cv::namedWindow(s_win, cv::WINDOW_NORMAL);
-  cv::namedWindow(v_win, cv::WINDOW_NORMAL);
 }
 
 void sd::ImgReadFirstFile(const char **argv, cv::Mat &img,
