@@ -36,7 +36,8 @@ void ResizeWindows(const std::string &main_win, const std::string &h_win,
                    const std::string &s_win, const std::string &v_win,
                    const std::string &hsv_chnls_sum_win,
                    const std::string &edges_win,
-                   const std::string &hsv_chnls_and_edges_sum_win);
+                   const std::string &hsv_chnls_and_edges_sum_win,
+                   const std::string &mask_win);
 
 void ShowImages(const std::string &main_win, const cv::Mat &sign_detect_res_img,
                 const std::string &h_win, const std::string &s_win,
@@ -46,13 +47,15 @@ void ShowImages(const std::string &main_win, const cv::Mat &sign_detect_res_img,
                 const cv::Mat &hsv_chnls_sum_img, const std::string &edges_win,
                 const cv::Mat &edges_img,
                 const std::string &hsv_chnls_and_edges_sum_win,
-                const cv::Mat &hsv_chnls_and_edges_sum_img);
+                const cv::Mat &hsv_chnls_and_edges_sum_img,
+                const std::string &mask_win, const cv::Mat &mask_img);
 
 void MoveWindows(const std::string &main_win, const std::string &h_win,
                  const std::string &s_win, const std::string &v_win,
                  const std::string &hsv_chnls_sum_win,
                  const std::string &edges_win,
-                 const std::string &hsv_chnls_and_edges_sum_win);
+                 const std::string &hsv_chnls_and_edges_sum_win,
+                 const std::string &mask_win);
 
 void SetParams(cv::SimpleBlobDetector::Params &params);
 
@@ -81,8 +84,9 @@ void MakeWindows(const std::string &main_win, const std::string &h_win,
                  const std::string &s_win, const std::string &v_win,
                  const std::string &hsv_chnls_sum_win,
                  const std::string &edges_win,
-                 const std::string &hsv_chnls_and_edges_sum_win);
-                 
+                 const std::string &hsv_chnls_and_edges_sum_win,
+                 const std::string &mask_win);
+
 void FindAndDrawContours(const cv::Mat &find_src, const cv::Mat &img,
                          cv::Mat &img_copy);
 void ChannelsRangedCreate(const std::vector<cv::Mat> &channels,

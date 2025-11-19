@@ -8,7 +8,8 @@ void sd::MakeWindows(const std::string &main_win, const std::string &h_win,
                      const std::string &s_win, const std::string &v_win,
                      const std::string &hsv_chnls_sum_win,
                      const std::string &edges_win,
-                     const std::string &hsv_chnls_and_edges_sum_win) {
+                     const std::string &hsv_chnls_and_edges_sum_win,
+                     const std::string &mask_win) {
   cv::namedWindow(main_win, cv::WINDOW_NORMAL);
 
   cv::namedWindow(h_win, cv::WINDOW_NORMAL);
@@ -27,6 +28,10 @@ void sd::MakeWindows(const std::string &main_win, const std::string &h_win,
   cv::namedWindow(hsv_chnls_and_edges_sum_win, cv::WINDOW_NORMAL);
 #endif
 
+#ifdef MASK
+  cv::namedWindow(mask_win, cv::WINDOW_NORMAL);
+#endif
+
 #ifndef HSV
   (void)hsv_chnls_sum_win;
 #endif
@@ -38,13 +43,18 @@ void sd::MakeWindows(const std::string &main_win, const std::string &h_win,
 #ifndef HSV_PLUS_EDGES
   (void)hsv_chnls_and_edges_sum_win;
 #endif
+
+#ifndef MASK
+  (void)mask_win;
+#endif
 }
 
 void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
                        const std::string &s_win, const std::string &v_win,
                        const std::string &hsv_chnls_sum_win,
                        const std::string &edges_win,
-                       const std::string &hsv_chnls_and_edges_sum_win) {
+                       const std::string &hsv_chnls_and_edges_sum_win,
+                       const std::string &mask_win) {
   cv::resizeWindow(main_win, MAIN_WIN_W, MAIN_WIN_H);
 
   cv::resizeWindow(h_win, H_WIN_W, H_WIN_H);
@@ -56,12 +66,15 @@ void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
 #endif
 
 #ifdef EDGES
-
   cv::resizeWindow(edges_win, MAIN_WIN_W, MAIN_WIN_H);
 #endif
 
 #ifdef HSV_PLUS_EDGES
   cv::resizeWindow(hsv_chnls_and_edges_sum_win, MAIN_WIN_W, MAIN_WIN_H);
+#endif
+
+#ifdef MASK
+  cv::resizeWindow(mask_win, MAIN_WIN_W, MAIN_WIN_H);
 #endif
 
   // (void)main_win;
@@ -79,6 +92,10 @@ void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
 #ifndef HSV_PLUS_EDGES
   (void)hsv_chnls_and_edges_sum_win;
 #endif
+
+#ifndef MASK
+  (void)mask_win;
+#endif
 }
 
 // Какую матрицу изображения где показывать
@@ -91,7 +108,8 @@ void sd::ShowImages(const std::string &main_win,
                     const cv::Mat &hsv_chnls_sum_img,
                     const std::string &edges_win, const cv::Mat &edges_img,
                     const std::string &hsv_chnls_and_edges_sum_win,
-                    const cv::Mat &hsv_chnls_and_edges_sum_img) {
+                    const cv::Mat &hsv_chnls_and_edges_sum_img,
+                    const std::string &mask_win, const cv::Mat &mask_img) {
   cv::imshow(main_win, sign_detect_res_img);
 
   cv::imshow(h_win, channels_ranged[0]);
@@ -108,6 +126,10 @@ void sd::ShowImages(const std::string &main_win,
 
 #ifdef HSV_PLUS_EDGES
   cv::imshow(hsv_chnls_and_edges_sum_win, hsv_chnls_and_edges_sum_img);
+#endif
+
+#ifdef MASK
+  cv::imshow(mask_win, mask_img);
 #endif
 
   // (void)main_win;
@@ -131,36 +153,68 @@ void sd::ShowImages(const std::string &main_win,
   (void)hsv_chnls_and_edges_sum_win;
   (void)hsv_chnls_and_edges_sum_img;
 #endif
+
+#ifndef MASK
+  (void)mask_win;
+  (void)mask_img;
+#endif
 }
 
 void sd::MoveWindows(const std::string &main_win, const std::string &h_win,
                      const std::string &s_win, const std::string &v_win,
                      const std::string &hsv_chnls_sum_win,
                      const std::string &edges_win,
-                     const std::string &hsv_chnls_and_edges_sum_win) {
+                     const std::string &hsv_chnls_and_edges_sum_win,
+                     const std::string &mask_win) {
+  int win_cnt = 1;
   cv::moveWindow(main_win, MAIN_WIN_X, MAIN_WIN_Y);
 
   cv::moveWindow(h_win, H_WIN_X, H_WIN_Y);
   cv::moveWindow(s_win, S_WIN_X, S_WIN_Y);
   cv::moveWindow(v_win, V_WIN_X, V_WIN_Y);
 
-// cv::moveWindow(hsv_chnls_sum_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X,
-//  MAIN_WIN_Y);
-#ifdef EDGES
-  cv::moveWindow(edges_win, MAIN_WIN_X + 2 * MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+#ifdef HSV
+  cv::moveWindow(hsv_chnls_sum_win,
+                 MAIN_WIN_X + win_cnt++ * MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
 #endif
-  // cv::moveWindow(hsv_chnls_and_edges_sum_win,
-  //  MAIN_WIN_X + MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+
+#ifdef EDGES
+  cv::moveWindow(edges_win, MAIN_WIN_X + win_cnt++ * MAIN_WIN_W + BORDER_X,
+                 MAIN_WIN_Y);
+#endif
+
+#ifdef HSV_PLUS_EDGES
+  cv::moveWindow(hsv_chnls_and_edges_sum_win,
+                 MAIN_WIN_X + win_cnt++ * MAIN_WIN_W + BORDER_X, MAIN_WIN_Y);
+#endif
+
+#ifdef MASK
+  cv::moveWindow(mask_win, MAIN_WIN_X + win_cnt++ * MAIN_WIN_W + BORDER_X,
+                 MAIN_WIN_Y);
+#endif
 
   // (void)main_win;
   // (void)h_win;
   // (void)s_win;
   // (void)v_win;
+
+#ifndef HSV
   (void)hsv_chnls_sum_win;
+#endif
+
 #ifndef EDGES
   (void)edges_win;
 #endif
+
+#ifndef HSV_PLUS_EDGES
   (void)hsv_chnls_and_edges_sum_win;
+#endif
+
+#ifndef MASK
+  (void)mask_win;
+#endif
+
+  ++win_cnt;
 }
 
 void sd::ChannelsInRange(const std::vector<cv::Mat> &channels,
@@ -263,7 +317,7 @@ void sd::FindAndDrawContours(const cv::Mat &find_src, const cv::Mat &img,
   img.copyTo(img_copy);
   for (size_t i = 0; i < contours.size(); i++) {
     cv::drawContours(img_copy, contours, static_cast<int>(i),
-                     cv::Scalar(0, 0, 255), 20, cv::LINE_8, hierarchy, 0);
+                     cv::Scalar(255, 255, 255), -1, cv::LINE_8, hierarchy, 0);
   }
 }
 

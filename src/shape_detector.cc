@@ -30,12 +30,13 @@ int main(int argc, char **argv) {
   std::string hsv_chnls_sum_win{"Channels sum"};
   std::string edges_win{"Canny edges"};
   std::string hsv_chnls_and_edges_sum_win{"Edges and channels"};
+  std::string mask_win{"Mask"};
 
   sd::MakeWindows(main_win, h_win, s_win, v_win, hsv_chnls_sum_win, edges_win,
-                  hsv_chnls_and_edges_sum_win);
+                  hsv_chnls_and_edges_sum_win, mask_win);
 
   sd::ResizeWindows(main_win, h_win, s_win, v_win, hsv_chnls_sum_win, edges_win,
-                    hsv_chnls_and_edges_sum_win);
+                    hsv_chnls_and_edges_sum_win, mask_win);
   // Windows----------------------------------------------------------------------
 
   // HSV Channels
@@ -66,18 +67,29 @@ int main(int argc, char **argv) {
     cv::Mat hsv_chnls_and_edges_sum_img;
     cv::bitwise_and(hsv_chnls_sum_img, edges_img, hsv_chnls_and_edges_sum_img);
 
-    sd::FindAndDrawContours(hsv_chnls_and_edges_sum_img, img,
-                            sign_detect_res_img);
+    cv::Mat black_img;
+    cv::cvtColor(img, black_img, cv::COLOR_BGR2GRAY);
+    black_img.setTo(cv::Scalar(0, 0, 0));
+
+    cv::Mat mask_img;
+
+    sd::FindAndDrawContours(hsv_chnls_sum_img, black_img, mask_img);
+
+    cv::cvtColor(mask_img, mask_img, cv::COLOR_GRAY2BGR);
+
+    img.copyTo(sign_detect_res_img);
+
+    cv::bitwise_and(sign_detect_res_img, mask_img, sign_detect_res_img);
 
     sd::ShowImages(main_win, sign_detect_res_img, h_win, s_win, v_win,
                    channels_ranged, hsv_chnls_sum_win, hsv_chnls_sum_img,
                    edges_win, edges_img, hsv_chnls_and_edges_sum_win,
-                   hsv_chnls_and_edges_sum_img);
+                   hsv_chnls_and_edges_sum_img, mask_win, mask_img);
 
     // Unfortunatelly I shall move windows after their show proccess(evry time)
 
     sd::MoveWindows(main_win, h_win, s_win, v_win, hsv_chnls_sum_win, edges_win,
-                    hsv_chnls_and_edges_sum_win);
+                    hsv_chnls_and_edges_sum_win, mask_win);
 
     // App exit
     if (cv::waitKey(PAUSE) == 27) {
