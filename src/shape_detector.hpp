@@ -62,7 +62,7 @@ void SetParams(cv::SimpleBlobDetector::Params &params);
 void ImgReadFirstFile(const char **argv, cv::Mat &img,
                       const enum cv::ImreadModes &img_read_mode);
 
-#define PAUSE 50  // milliseconds
+#define PAUSE 150  // milliseconds
 bool MainCycleState();
 
 void CreateTrackbars(const std::vector<cv::Mat> &channels,

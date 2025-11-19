@@ -8,6 +8,7 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/opencv.hpp>
+#include <vector>
 
 int main(int argc, char **argv) {
   // Main goal value
@@ -57,6 +58,8 @@ int main(int argc, char **argv) {
   sd::ChannelsRangedCreate(channels, channels_ranged);
 
   // Main Cycle
+  static int j = 0;
+  int i = 1;
   while (true) {
     sd::ChannelsInRange(channels, channels_ranged, h_min, h_max, s_min, s_max,
                         v_min, v_max);
@@ -75,16 +78,38 @@ int main(int argc, char **argv) {
 
     sd::FindAndDrawContours(hsv_chnls_sum_img, black_img, mask_img);
 
+    std::vector<std::vector<cv::Point>> contours;
+    std::vector<cv::Vec4i> hierarchy;
+
     cv::cvtColor(mask_img, mask_img, cv::COLOR_GRAY2BGR);
 
     img.copyTo(sign_detect_res_img);
 
     cv::bitwise_and(sign_detect_res_img, mask_img, sign_detect_res_img);
 
-    sd::ShowImages(main_win, sign_detect_res_img, h_win, s_win, v_win,
-                   channels_ranged, hsv_chnls_sum_win, hsv_chnls_sum_img,
-                   edges_win, edges_img, hsv_chnls_and_edges_sum_win,
-                   hsv_chnls_and_edges_sum_img, mask_win, mask_img);
+    cv::findContours(hsv_chnls_sum_img, contours, hierarchy, cv::RETR_EXTERNAL,
+                     cv::CHAIN_APPROX_SIMPLE);
+
+    cv::Mat final = cv::Mat::zeros(img.size(), img.type());
+
+    for (const auto &el : contours) {
+      cv::Rect bbox = cv::boundingRect(el);
+
+      // Копируем область из исходного изображения
+      cv::Mat object_roi = img(bbox).clone();
+
+      if (!j) {
+        cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
+      }
+
+      // Вставляем объект в финальное изображение
+      object_roi.copyTo(final(bbox));
+    }
+
+    sd::ShowImages(main_win, final, h_win, s_win, v_win, channels_ranged,
+                   hsv_chnls_sum_win, hsv_chnls_sum_img, edges_win, edges_img,
+                   hsv_chnls_and_edges_sum_win, hsv_chnls_and_edges_sum_img,
+                   mask_win, mask_img);
 
     // Unfortunatelly I shall move windows after their show proccess(evry time)
 
@@ -95,6 +120,7 @@ int main(int argc, char **argv) {
     if (cv::waitKey(PAUSE) == 27) {
       break;
     }
+    ++j;
   }
 
   cv::destroyAllWindows();
