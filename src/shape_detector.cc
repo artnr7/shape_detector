@@ -106,6 +106,20 @@ int main(int argc, char **argv) {
       object_roi.copyTo(final(bbox));
     }
 
+    for (const auto &el : contours) {
+      cv::Rect bbox = cv::boundingRect(el);
+
+      // Копируем область из исходного изображения
+      cv::Mat object_roi = sign_detect_res_img(bbox).clone();
+
+      if (!j) {
+        cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
+      }
+
+      // Вставляем объект в финальное изображение
+      object_roi.copyTo(final(bbox));
+    }
+
     sd::ShowImages(main_win, final, h_win, s_win, v_win, channels_ranged,
                    hsv_chnls_sum_win, hsv_chnls_sum_img, edges_win, edges_img,
                    hsv_chnls_and_edges_sum_win, hsv_chnls_and_edges_sum_img,
