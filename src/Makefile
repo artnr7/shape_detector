@@ -3,7 +3,7 @@ ifeq ($(shell expr $(NPROC) \< 1), 1)
 	NPROC := 1 
 endif
 
-.PHONY: all install f clang_f cmake_f
+.PHONY: all install f clang_f cmake_f output
 
 
 default: r
@@ -21,10 +21,13 @@ run:
 # 	@./install_d/shape_detector $(DATASETS)/pedestrian.jpg
 	@./install_d/shape_detector $(DATASETS)/stop.jpg
 
-r: f install run
+r: output f install run
+
+output:
+	@mkdir -p output
 
 del:
-	@rm -rf build .cache
+	@rm -rf build .cache output
 
 f: clang_f cmake_f
 	@echo 'Format done'

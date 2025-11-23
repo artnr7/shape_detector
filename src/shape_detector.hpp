@@ -32,6 +32,18 @@ namespace sd {
 #define V_WIN_X (S_WIN_X + S_WIN_W + BORDER_X)
 #define V_WIN_Y UTIL_WIN_Y
 
+// color primitives
+enum clr { RED = 1, BLUE, YELLOW };
+
+#define RED_MIN 165
+#define RED_MAX 179
+
+#define BLUE_MIN 95
+#define BLUE_MAX 145
+
+#define YELLOW_MIN 165
+#define YELLOW_MAX 179
+
 void ResizeWindows(const std::string &main_win, const std::string &h_win,
                    const std::string &s_win, const std::string &v_win,
                    const std::string &hsv_chnls_sum_win,
@@ -87,8 +99,13 @@ void MakeWindows(const std::string &main_win, const std::string &h_win,
                  const std::string &hsv_chnls_and_edges_sum_win,
                  const std::string &mask_win);
 
-void FindAndDrawContours(const cv::Mat &find_src, const cv::Mat &img,
+void FindAndFillContours(const cv::Mat &find_src, const cv::Mat &img,
                          cv::Mat &img_copy);
 void ChannelsRangedCreate(const std::vector<cv::Mat> &channels,
                           std::vector<cv::Mat> &channels_ranged);
+void SetColorizedMask(const cv::Mat &img, cv::Mat mask_img,
+                      cv::Mat &clr_mask_img);
+
+void WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
+                           const cv::Mat &src, int &i, int &j, cv::Mat &dst);
 }  // namespace sd

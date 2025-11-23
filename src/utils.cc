@@ -298,20 +298,21 @@ void sd::CreateTrackbars(const std::vector<cv::Mat> &channels,
 
 void sd::ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
                                int &v_min, int &v_max) {
-  h_min = 165;
-  h_max = 179;
+  h_min = RED_MIN;
+  h_max = RED_MAX;
   s_min = 90;
   s_max = 255;
   v_min = 65;
   v_max = 188;
 }
 
-void sd::FindAndDrawContours(const cv::Mat &find_src, const cv::Mat &img,
+// Ищет контуры в search_src, после рисует их на img_copy и заливает их изнутри
+void sd::FindAndFillContours(const cv::Mat &search_src, const cv::Mat &img,
                              cv::Mat &img_copy) {
   std::vector<std::vector<cv::Point>> contours;
   std::vector<cv::Vec4i> hierarchy;
 
-  cv::findContours(find_src, contours, hierarchy, cv::RETR_EXTERNAL,
+  cv::findContours(search_src, contours, hierarchy, cv::RETR_EXTERNAL,
                    cv::CHAIN_APPROX_SIMPLE);
 
   img.copyTo(img_copy);
@@ -325,5 +326,31 @@ void sd::ChannelsRangedCreate(const std::vector<cv::Mat> &channels,
                               std::vector<cv::Mat> &channels_ranged) {
   for (size_t i = 0; i < channels.size(); ++i) {
     channels_ranged.push_back({});
+  }
+}
+
+void sd::SetColorizedMask(const cv::Mat &img, cv::Mat mask_img,
+                          cv::Mat &clr_mask_img) {
+  cv::cvtColor(mask_img, mask_img, cv::COLOR_GRAY2BGR);
+  img.copyTo(clr_mask_img);
+  cv::bitwise_and(clr_mask_img, mask_img, clr_mask_img);
+}
+
+void sd::WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
+                           const cv::Mat &src, int &i, int &j, cv::Mat &dst) {
+  for (const auto &el : contours) {
+    cv::Rect bbox = cv::boundingRect(el);
+
+    // Копируем область из исходного изображения
+    cv::Mat object_roi = src(bbox).clone();
+
+    if (!j) {
+      if (object_roi.rows > 1 && object_roi.cols > 1) {
+        cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
+      }
+    }
+
+    // Вставляем объект в финальное изображение
+    object_roi.copyTo(dst(bbox));
   }
 }

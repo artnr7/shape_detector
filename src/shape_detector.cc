@@ -8,20 +8,33 @@
 #include <opencv2/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/opencv.hpp>
-#include <vector>
 
 int main(int argc, char **argv) {
   // Main goal value
   cv::Mat sign_detect_res_img;
   // Primitives
+  // src
   cv::Mat img;
   sd::ImgReadFirstFile((const char **)argv, img, cv::IMREAD_COLOR);
+  // blured
   cv::Mat blur_img;
   cv::GaussianBlur(img, blur_img, cv::Size(3, 3), 0);
+  // edges
   cv::Mat edges_img;
   cv::Canny(blur_img, edges_img, 100, 200, 3, false);
+  // hsv channels img
   cv::Mat hsv_img;
   cv::cvtColor(blur_img, hsv_img, cv::COLOR_BGR2HSV);
+  // black
+  cv::Mat black_img;
+  cv::cvtColor(img, black_img, cv::COLOR_BGR2GRAY);
+  black_img.setTo(cv::Scalar(0, 0, 0));
+  // mask
+  cv::Mat mask_img;
+  img.copyTo(mask_img);
+  // colorized mask
+  cv::Mat clr_mask_img;
+  img.copyTo(clr_mask_img);
 
   // Windows
   std::string main_win{"Rawd Sign Detector"};
@@ -58,8 +71,9 @@ int main(int argc, char **argv) {
   sd::ChannelsRangedCreate(channels, channels_ranged);
 
   // Main Cycle
-  static int j = 0;
+  int j = 0;
   int i = 1;
+
   while (true) {
     sd::ChannelsInRange(channels, channels_ranged, h_min, h_max, s_min, s_max,
                         v_min, v_max);
@@ -70,60 +84,29 @@ int main(int argc, char **argv) {
     cv::Mat hsv_chnls_and_edges_sum_img;
     cv::bitwise_and(hsv_chnls_sum_img, edges_img, hsv_chnls_and_edges_sum_img);
 
-    cv::Mat black_img;
-    cv::cvtColor(img, black_img, cv::COLOR_BGR2GRAY);
-    black_img.setTo(cv::Scalar(0, 0, 0));
+    sd::FindAndFillContours(hsv_chnls_sum_img, black_img, mask_img);
 
-    cv::Mat mask_img;
+    sd::SetColorizedMask(img, mask_img, clr_mask_img);
 
-    sd::FindAndDrawContours(hsv_chnls_sum_img, black_img, mask_img);
+    cv::Mat sign_detect_res_img = cv::Mat::zeros(img.size(), img.type());
 
     std::vector<std::vector<cv::Point>> contours;
     std::vector<cv::Vec4i> hierarchy;
 
-    cv::cvtColor(mask_img, mask_img, cv::COLOR_GRAY2BGR);
-
-    img.copyTo(sign_detect_res_img);
-
-    cv::bitwise_and(sign_detect_res_img, mask_img, sign_detect_res_img);
-
     cv::findContours(hsv_chnls_sum_img, contours, hierarchy, cv::RETR_EXTERNAL,
                      cv::CHAIN_APPROX_SIMPLE);
 
-    cv::Mat final = cv::Mat::zeros(img.size(), img.type());
+    // Вырезаем из исходного изображения, получаются прямоугольники где объект
+    // на фоне всего
+    sd::WriteContoursRect(contours, img, i, j, sign_detect_res_img);
+    // Вырезаем из исходного изображения, получаются прямоугольники где объект
+    // на чёрном фоне
+    sd::WriteContoursRect(contours, clr_mask_img, i, j, sign_detect_res_img);
 
-    for (const auto &el : contours) {
-      cv::Rect bbox = cv::boundingRect(el);
-
-      // Копируем область из исходного изображения
-      cv::Mat object_roi = img(bbox).clone();
-
-      if (!j) {
-        cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
-      }
-
-      // Вставляем объект в финальное изображение
-      object_roi.copyTo(final(bbox));
-    }
-
-    for (const auto &el : contours) {
-      cv::Rect bbox = cv::boundingRect(el);
-
-      // Копируем область из исходного изображения
-      cv::Mat object_roi = sign_detect_res_img(bbox).clone();
-
-      if (!j) {
-        cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
-      }
-
-      // Вставляем объект в финальное изображение
-      object_roi.copyTo(final(bbox));
-    }
-
-    sd::ShowImages(main_win, final, h_win, s_win, v_win, channels_ranged,
-                   hsv_chnls_sum_win, hsv_chnls_sum_img, edges_win, edges_img,
-                   hsv_chnls_and_edges_sum_win, hsv_chnls_and_edges_sum_img,
-                   mask_win, mask_img);
+    sd::ShowImages(main_win, sign_detect_res_img, h_win, s_win, v_win,
+                   channels_ranged, hsv_chnls_sum_win, hsv_chnls_sum_img,
+                   edges_win, edges_img, hsv_chnls_and_edges_sum_win,
+                   hsv_chnls_and_edges_sum_img, mask_win, mask_img);
 
     // Unfortunatelly I shall move windows after their show proccess(evry time)
 
