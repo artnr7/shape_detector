@@ -19,8 +19,9 @@ install:
 
 run:
 # 	@./install_d/shape_detector $(DATASETS)/pedestrian.jpg
-	@./install_d/shape_detector $(DATASETS)/stop.jpg
+# 	@./install_d/shape_detector $(DATASETS)/stop.jpg
 # 	@./install_d/shape_detector $(DATASETS)/many.jpg
+	@./install_d/shape_detector $(DATASETS)/arrow.jpg
 
 r: clean output f install run
 

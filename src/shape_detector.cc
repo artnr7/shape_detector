@@ -76,9 +76,9 @@ int main(int argc, char **argv) {
 
   int clr_mode = 0;
   while (true) {
+    sd::SetColorMode(clr_mode, h_min, h_max);
     clr_mode %= COLOR_QTY;
     ++clr_mode;
-    // sd::SetColorMode(clr_mode, h_min, h_max);`
     sd::ChannelsInRange(channels, channels_ranged, h_min, h_max, s_min, s_max,
                         v_min, v_max);
 
@@ -109,40 +109,6 @@ int main(int argc, char **argv) {
     // на чёрном фоне
     sd::WriteContoursRect(contours, clr_mask_img, output_imgs_cnt, j,
                           sign_detect_res_img);
-
-    // for (const auto &el : contours) {
-    //   double area = cv::contourArea(el);
-    //   double perimeter = cv::arcLength(el, true);
-
-    //   std::vector<cv::Point> approx;
-    //   cv::approxPolyDP(el, approx, 0.02 * perimeter, true);
-
-    //   if (approx.size() == 4 && area > 10) {
-    //     cv::drawContours(img, std::vector<std::vector<cv::Point>>{el}, -1,
-    //                      cv::Scalar(0, 255, 0), 3);
-    //   }
-    // }
-
-    for (const auto &contour : contours) {
-      double area = cv::contourArea(contour);
-      double perimeter = cv::arcLength(contour, true);
-
-      // circularity
-      double circularity = 4 * CV_PI * (area / (perimeter * perimeter));
-      if (circularity < 0.6) continue;  // порог на круговую форму
-
-      if (contour.size() >= 5) {
-        cv::RotatedRect ellipse = cv::fitEllipse(contour);
-        double ratio = ellipse.size.width / ellipse.size.height;
-        if (ratio < 0.6 || ratio > 1.4)
-          continue;  
-      }
-
-      // Если прошли фильтры — контур подходит как круг
-      // Можно нарисовать контур
-      cv::drawContours(img, std::vector<std::vector<cv::Point>>{contour}, -1,
-                       cv::Scalar(0, 255, 0), 3);
-    }
 
     sd::ShowImages(main_win, sign_detect_res_img, h_win, s_win, v_win,
                    channels_ranged, hsv_chnls_sum_win, hsv_chnls_sum_img,

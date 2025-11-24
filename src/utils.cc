@@ -1,4 +1,7 @@
+#include <opencv2/core/types.hpp>
 #include <opencv2/highgui.hpp>
+#include <opencv2/opencv.hpp>
+#include <opencv2/videoio.hpp>
 #include <string>
 #include <vector>
 
@@ -343,19 +346,43 @@ void sd::SetColorizedMask(const cv::Mat &img, cv::Mat mask_img,
 void sd::WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
                            const cv::Mat &src, int &i, int &j, cv::Mat &dst) {
   for (const auto &el : contours) {
+    double area = cv::contourArea(el);
+    double perimeter = cv::arcLength(el, true);
+
+    if (el.size() >= 5) {
+      double circularity = 4 * CV_PI * (area / (perimeter * perimeter));
+      if (circularity < 0.6) {
+        continue;
+      }
+      cv::RotatedRect ellipse = cv::fitEllipse(el);
+      double ratio = ellipse.size.width / ellipse.size.height;
+      if (ratio < 0.6 || ratio > 1.4) {
+        continue;
+      }
+    } else {
+      std::vector<cv::Point> approx;
+      cv::approxPolyDP(el, approx, 0.02 * perimeter, true);
+
+      if (!((approx.size() == 3 || approx.size() == 4) && area > 15)) {
+        continue;
+      }
+    }
+
     cv::Rect bbox = cv::boundingRect(el);
 
     // Копируем область из исходного изображения
     cv::Mat object_roi = src(bbox).clone();
 
-    if (j < COLOR_QTY) {
-      if (object_roi.rows > MIN_IMG_AX_SIZE &&
-          object_roi.cols > MIN_IMG_AX_SIZE) {
-        
-        cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
-      }
+    if (!(j < COLOR_QTY)) {
+      continue;
     }
 
+    if (!(object_roi.rows > MIN_IMG_AX_SIZE &&
+          object_roi.cols > MIN_IMG_AX_SIZE)) {
+      continue;
+    }
+
+    cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
     // Вставляем объект в финальное изображение
     object_roi.copyTo(dst(bbox));
   }
