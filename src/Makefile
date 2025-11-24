@@ -20,11 +20,15 @@ install:
 run:
 # 	@./install_d/shape_detector $(DATASETS)/pedestrian.jpg
 	@./install_d/shape_detector $(DATASETS)/stop.jpg
+# 	@./install_d/shape_detector $(DATASETS)/many.jpg
 
-r: output f install run
+r: clean output f install run
 
 output:
 	@mkdir -p output
+
+clean:
+	@rm -f output/*.jpg
 
 del:
 	@rm -rf build .cache output

@@ -32,17 +32,21 @@ namespace sd {
 #define V_WIN_X (S_WIN_X + S_WIN_W + BORDER_X)
 #define V_WIN_Y UTIL_WIN_Y
 
-// color primitives
-enum clr { RED = 1, BLUE, YELLOW };
+// color
+#define COLOR_QTY 3
+enum clr { RED = 0, BLUE, YELLOW };
 
 #define RED_MIN 165
 #define RED_MAX 179
 
-#define BLUE_MIN 95
-#define BLUE_MAX 145
+#define BLUE_MIN 100
+#define BLUE_MAX 115
 
-#define YELLOW_MIN 165
-#define YELLOW_MAX 179
+#define YELLOW_MIN 9
+#define YELLOW_MAX 31
+
+// misc
+#define MIN_IMG_AX_SIZE 100
 
 void ResizeWindows(const std::string &main_win, const std::string &h_win,
                    const std::string &s_win, const std::string &v_win,
@@ -107,5 +111,7 @@ void SetColorizedMask(const cv::Mat &img, cv::Mat mask_img,
                       cv::Mat &clr_mask_img);
 
 void WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
-                           const cv::Mat &src, int &i, int &j, cv::Mat &dst);
+                       const cv::Mat &src, int &i, int &j, cv::Mat &dst);
+void SetColorMode(int clr_mode, int &h_min, int &h_max);
+
 }  // namespace sd

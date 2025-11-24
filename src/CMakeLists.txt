@@ -19,7 +19,7 @@ set_target_properties(${SHAPE_DETECTOR_APP} PROPERTIES RUNTIME_OUTPUT_DIRECTORY
 target_compile_options(${SHAPE_DETECTOR_APP} PRIVATE -Wall -Werror -Wextra)
 
 # target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE EDGES)
-# target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE HSV)
+target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE HSV)
 # target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE HSV_PLUS_EDGES)
 target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE MASK)
 

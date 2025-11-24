@@ -238,25 +238,29 @@ void sd::ImgReadFirstFile(const char **argv, cv::Mat &img,
 }
 
 void sd::SetParams(cv::SimpleBlobDetector::Params &params) {
-  params.minThreshold = 100;
+  params.minThreshold = 10;
   params.maxThreshold = 200;
 
   params.filterByArea = true;
-  params.minArea = 15;
-  // params.maxArea = 1500;
+  params.minArea = 100;
+  params.maxArea = 100000;
 
   params.filterByCircularity = true;
-  params.minCircularity = 0.01;
+  params.minCircularity = 0.007;
+  // params.minCircularity = 0.1;
 
-  // params.filterByConvexity = true;
-  // params.minConvexity = 0.01;
+  params.filterByConvexity = true;
+  params.minConvexity = 0.009;
+  // params.minConvexity = 0.87;
 
   params.filterByInertia = true;
-  params.minInertiaRatio = 0.01;
+  params.minInertiaRatio = 0.005;
 
   params.filterByColor = true;
   params.blobColor = 255;
+  // (void)params;
 }
+
 bool sd::MainCycleState() {
   bool state = true;
 
@@ -300,10 +304,10 @@ void sd::ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
                                int &v_min, int &v_max) {
   h_min = RED_MIN;
   h_max = RED_MAX;
-  s_min = 90;
+  s_min = 65;
   s_max = 255;
   v_min = 65;
-  v_max = 188;
+  v_max = 255;
 }
 
 // Ищет контуры в search_src, после рисует их на img_copy и заливает их изнутри
@@ -344,13 +348,32 @@ void sd::WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
     // Копируем область из исходного изображения
     cv::Mat object_roi = src(bbox).clone();
 
-    if (!j) {
-      if (object_roi.rows > 1 && object_roi.cols > 1) {
+    if (j < COLOR_QTY) {
+      if (object_roi.rows > MIN_IMG_AX_SIZE &&
+          object_roi.cols > MIN_IMG_AX_SIZE) {
+        
         cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
       }
     }
 
     // Вставляем объект в финальное изображение
     object_roi.copyTo(dst(bbox));
+  }
+}
+
+void sd::SetColorMode(int clr_mode, int &h_min, int &h_max) {
+  switch (clr_mode) {
+    case sd::RED:
+      h_min = RED_MIN;
+      h_max = RED_MAX;
+      break;
+    case sd::BLUE:
+      h_min = BLUE_MIN;
+      h_max = BLUE_MAX;
+      break;
+    case sd::YELLOW:
+      h_min = YELLOW_MIN;
+      h_max = YELLOW_MAX;
+      break;
   }
 }
