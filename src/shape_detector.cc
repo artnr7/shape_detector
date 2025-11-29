@@ -9,13 +9,13 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/opencv.hpp>
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   // Main goal value
   cv::Mat sign_detect_res_img;
   // Primitives
   // src
   cv::Mat img;
-  sd::ImgReadFirstFile((const char **)argv, img, cv::IMREAD_COLOR);
+  sd::ImgReadFirstFile((const char**)argv, img, cv::IMREAD_COLOR);
   // blured
   cv::Mat blur_img;
   cv::GaussianBlur(img, blur_img, cv::Size(3, 3), 0);

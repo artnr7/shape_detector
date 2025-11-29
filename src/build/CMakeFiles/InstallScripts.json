@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"/root/projs/shape_detector/src/build/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
