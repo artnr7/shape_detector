@@ -14,5 +14,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # OpenCV
 #----------------------------------------------------------→
 find_package(OpenCV REQUIRED)
-# include_directories(${OpenCV_INCLUDE_DIRS})
+include_directories(${OpenCV_INCLUDE_DIRS})
 

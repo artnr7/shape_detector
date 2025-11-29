@@ -32,7 +32,7 @@ clean:
 	@rm -f output/*.jpg
 
 del:
-	@rm -rf build .cache output
+	@rm -rf build .cache output install_d
 
 f: clang_f cmake_f
 	@echo 'Format done'

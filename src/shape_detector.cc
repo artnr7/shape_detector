@@ -9,6 +9,7 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/opencv.hpp>
 
+
 int main(int argc, char** argv) {
   // Main goal value
   cv::Mat sign_detect_res_img;
