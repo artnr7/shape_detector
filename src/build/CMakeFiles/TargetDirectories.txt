@@ -1,5 +1,0 @@
-/root/projs/shape_detector/src/build/CMakeFiles/shape_detector.dir
-/root/projs/shape_detector/src/build/CMakeFiles/run_shape_detector.dir
-/root/projs/shape_detector/src/build/CMakeFiles/test.dir
-/root/projs/shape_detector/src/build/CMakeFiles/edit_cache.dir
-/root/projs/shape_detector/src/build/CMakeFiles/rebuild_cache.dir
