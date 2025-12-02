@@ -7,12 +7,12 @@
 
 #include "shape_detector.hpp"
 
-void sd::MakeWindows(const std::string &main_win, const std::string &h_win,
-                     const std::string &s_win, const std::string &v_win,
-                     const std::string &hsv_chnls_sum_win,
-                     const std::string &edges_win,
-                     const std::string &hsv_chnls_and_edges_sum_win,
-                     const std::string &mask_win) {
+void sd::MakeWindows(const std::string& main_win, const std::string& h_win,
+                     const std::string& s_win, const std::string& v_win,
+                     const std::string& hsv_chnls_sum_win,
+                     const std::string& edges_win,
+                     const std::string& hsv_chnls_and_edges_sum_win,
+                     const std::string& mask_win) {
   cv::namedWindow(main_win, cv::WINDOW_NORMAL);
 
   cv::namedWindow(h_win, cv::WINDOW_NORMAL);
@@ -52,12 +52,12 @@ void sd::MakeWindows(const std::string &main_win, const std::string &h_win,
 #endif
 }
 
-void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
-                       const std::string &s_win, const std::string &v_win,
-                       const std::string &hsv_chnls_sum_win,
-                       const std::string &edges_win,
-                       const std::string &hsv_chnls_and_edges_sum_win,
-                       const std::string &mask_win) {
+void sd::ResizeWindows(const std::string& main_win, const std::string& h_win,
+                       const std::string& s_win, const std::string& v_win,
+                       const std::string& hsv_chnls_sum_win,
+                       const std::string& edges_win,
+                       const std::string& hsv_chnls_and_edges_sum_win,
+                       const std::string& mask_win) {
   cv::resizeWindow(main_win, MAIN_WIN_W, MAIN_WIN_H);
 
   cv::resizeWindow(h_win, H_WIN_W, H_WIN_H);
@@ -80,10 +80,6 @@ void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
   cv::resizeWindow(mask_win, MAIN_WIN_W, MAIN_WIN_H);
 #endif
 
-  // (void)main_win;
-  // (void)h_win;
-  // (void)s_win;
-  // (void)v_win;
 #ifndef HSV
   (void)hsv_chnls_sum_win;
 #endif
@@ -102,17 +98,15 @@ void sd::ResizeWindows(const std::string &main_win, const std::string &h_win,
 }
 
 // Какую матрицу изображения где показывать
-void sd::ShowImages(const std::string &main_win,
-                    const cv::Mat &sign_detect_res_img,
-                    const std::string &h_win, const std::string &s_win,
-                    const std::string &v_win,
+void sd::ShowImages(const std::string& main_win,
+                    const cv::Mat& sign_detect_res_img,
+                    const std::string& h_win, const std::string& s_win,
+                    const std::string& v_win,
                     const std::vector<cv::Mat> channels_ranged,
-                    const std::string &hsv_chnls_sum_win,
-                    const cv::Mat &hsv_chnls_sum_img,
-                    const std::string &edges_win, const cv::Mat &edges_img,
-                    const std::string &hsv_chnls_and_edges_sum_win,
-                    const cv::Mat &hsv_chnls_and_edges_sum_img,
-                    const std::string &mask_win, const cv::Mat &mask_img) {
+                    const std::string& hsv_chnls_sum_win,
+                    const cv::Mat& hsv_chnls_sum_img,
+                    const std::string& edges_win, const cv::Mat& edges_img,
+                    const std::string& mask_win, const cv::Mat& mask_img) {
   cv::imshow(main_win, sign_detect_res_img);
 
   cv::imshow(h_win, channels_ranged[0]);
@@ -135,13 +129,6 @@ void sd::ShowImages(const std::string &main_win,
   cv::imshow(mask_win, mask_img);
 #endif
 
-  // (void)main_win;
-  // (void)sign_detect_res_img;
-  // (void)h_win;
-  // (void)s_win;
-  // (void)v_win;
-  // (void)channels_ranged;
-
 #ifndef HSV
   (void)hsv_chnls_sum_win;
   (void)hsv_chnls_sum_img;
@@ -152,23 +139,18 @@ void sd::ShowImages(const std::string &main_win,
   (void)edges_img;
 #endif
 
-#ifndef HSV_PLUS_EDGES
-  (void)hsv_chnls_and_edges_sum_win;
-  (void)hsv_chnls_and_edges_sum_img;
-#endif
-
 #ifndef MASK
   (void)mask_win;
   (void)mask_img;
 #endif
 }
 
-void sd::MoveWindows(const std::string &main_win, const std::string &h_win,
-                     const std::string &s_win, const std::string &v_win,
-                     const std::string &hsv_chnls_sum_win,
-                     const std::string &edges_win,
-                     const std::string &hsv_chnls_and_edges_sum_win,
-                     const std::string &mask_win) {
+void sd::MoveWindows(const std::string& main_win, const std::string& h_win,
+                     const std::string& s_win, const std::string& v_win,
+                     const std::string& hsv_chnls_sum_win,
+                     const std::string& edges_win,
+                     const std::string& hsv_chnls_and_edges_sum_win,
+                     const std::string& mask_win) {
   int win_cnt = 1;
   cv::moveWindow(main_win, MAIN_WIN_X, MAIN_WIN_Y);
 
@@ -196,11 +178,6 @@ void sd::MoveWindows(const std::string &main_win, const std::string &h_win,
                  MAIN_WIN_Y);
 #endif
 
-  // (void)main_win;
-  // (void)h_win;
-  // (void)s_win;
-  // (void)v_win;
-
 #ifndef HSV
   (void)hsv_chnls_sum_win;
 #endif
@@ -220,8 +197,8 @@ void sd::MoveWindows(const std::string &main_win, const std::string &h_win,
   ++win_cnt;
 }
 
-void sd::ChannelsInRange(const std::vector<cv::Mat> &channels,
-                         std::vector<cv::Mat> &channels_ranged, int h_min,
+void sd::ChannelsInRange(const std::vector<cv::Mat>& channels,
+                         std::vector<cv::Mat>& channels_ranged, int h_min,
                          int h_max, int s_min, int s_max, int v_min,
                          int v_max) {
   cv::inRange(channels[0], h_min, h_max, channels_ranged[0]);
@@ -229,18 +206,13 @@ void sd::ChannelsInRange(const std::vector<cv::Mat> &channels,
   cv::inRange(channels[2], v_min, v_max, channels_ranged[2]);
 }
 
-void sd::ChannelsSum(cv::Mat &hsv_bin_sum,
+void sd::ChannelsSum(cv::Mat& hsv_bin_sum,
                      const std::vector<cv::Mat> channels_ranged) {
   cv::bitwise_and(channels_ranged[0], channels_ranged[1], hsv_bin_sum);
   cv::bitwise_and(channels_ranged[2], hsv_bin_sum, hsv_bin_sum);
 }
 
-void sd::ImgReadFirstFile(const char **argv, cv::Mat &img,
-                          const enum cv::ImreadModes &img_read_mode) {
-  img = imread(argv[1], img_read_mode);
-}
-
-void sd::SetParams(cv::SimpleBlobDetector::Params &params) {
+void sd::SetParams(cv::SimpleBlobDetector::Params& params) {
   params.minThreshold = 10;
   params.maxThreshold = 200;
 
@@ -264,47 +236,29 @@ void sd::SetParams(cv::SimpleBlobDetector::Params &params) {
   // (void)params;
 }
 
-bool sd::MainCycleState() {
-  bool state = true;
-
-  if (cv::waitKey(PAUSE) == 27) {
-    state = false;
-  }
-
-  return state;
-}
-
-void sd::CreateTrackbars(const std::vector<cv::Mat> &channels,
-                         const std::string &h_win, const std::string &s_win,
-                         const std::string &v_win, int &h_min, int &h_max,
-                         int &s_min, int &s_max, int &v_min, int &v_max) {
+void sd::CreateTrackbars(const std::vector<cv::Mat>& channels,
+                         const std::string& h_win, const std::string& s_win,
+                         const std::string& v_win, int& h_min, int& h_max,
+                         int& s_min, int& s_max, int& v_min, int& v_max) {
   int h_maxv = 179;
   int sv_max = 255;
   double min = 0, max = 0;
 
   cv::minMaxLoc(channels[0], &min, &max);
-  // h_min = min;
-  // h_max = max;
   cv::createTrackbar("Hmin", h_win, &h_min, h_maxv);
   cv::createTrackbar("Hmax", h_win, &h_max, h_maxv);
 
   cv::minMaxLoc(channels[1], &min, &max);
-
-  // s_min = min;
-  // s_max = max;
   cv::createTrackbar("Smin", s_win, &s_min, sv_max);
   cv::createTrackbar("Smax", s_win, &s_max, sv_max);
 
   cv::minMaxLoc(channels[2], &min, &max);
-
-  // v_min = min;
-  // v_max = max;
   cv::createTrackbar("Vmin", v_win, &v_min, sv_max);
   cv::createTrackbar("Vmax", v_win, &v_max, sv_max);
 }
 
-void sd::ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
-                               int &v_min, int &v_max) {
+void sd::ChangeTrackbarsValues(int& h_min, int& h_max, int& s_min, int& s_max,
+                               int& v_min, int& v_max) {
   h_min = RED_MIN;
   h_max = RED_MAX;
   s_min = 65;
@@ -314,14 +268,9 @@ void sd::ChangeTrackbarsValues(int &h_min, int &h_max, int &s_min, int &s_max,
 }
 
 // Ищет контуры в search_src, после рисует их на img_copy и заливает их изнутри
-void sd::FindAndFillContours(const cv::Mat &search_src, const cv::Mat &img,
-                             cv::Mat &img_copy) {
-  std::vector<std::vector<cv::Point>> contours;
-  std::vector<cv::Vec4i> hierarchy;
-
-  cv::findContours(search_src, contours, hierarchy, cv::RETR_EXTERNAL,
-                   cv::CHAIN_APPROX_SIMPLE);
-
+void sd::FillMask(std::vector<std::vector<cv::Point>>& contours,
+                             std::vector<cv::Vec4i>& hierarchy,
+                             const cv::Mat& img, cv::Mat& img_copy) {
   img.copyTo(img_copy);
   for (size_t i = 0; i < contours.size(); i++) {
     cv::drawContours(img_copy, contours, static_cast<int>(i),
@@ -329,23 +278,26 @@ void sd::FindAndFillContours(const cv::Mat &search_src, const cv::Mat &img,
   }
 }
 
-void sd::ChannelsRangedCreate(const std::vector<cv::Mat> &channels,
-                              std::vector<cv::Mat> &channels_ranged) {
+void sd::ChannelsRangedCreate(const std::vector<cv::Mat>& channels,
+                              std::vector<cv::Mat>& channels_ranged) {
   for (size_t i = 0; i < channels.size(); ++i) {
     channels_ranged.push_back({});
   }
 }
 
-void sd::SetColorizedMask(const cv::Mat &img, cv::Mat mask_img,
-                          cv::Mat &clr_mask_img) {
+void sd::SetColorizedMask(const cv::Mat& img, cv::Mat mask_img,
+                          cv::Mat& clr_mask_img) {
   cv::cvtColor(mask_img, mask_img, cv::COLOR_GRAY2BGR);
   img.copyTo(clr_mask_img);
   cv::bitwise_and(clr_mask_img, mask_img, clr_mask_img);
 }
 
 void sd::WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
-                           const cv::Mat &src, int &i, int &j, cv::Mat &dst) {
-  for (const auto &el : contours) {
+                           const cv::Mat& src, int& output_imgs_cnt,
+                           int& output_limit, cv::Mat& dst) {
+  static int i = 0;
+
+  for (const auto& el : contours) {
     double area = cv::contourArea(el);
     double perimeter = cv::arcLength(el, true);
 
@@ -373,7 +325,7 @@ void sd::WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
     // Копируем область из исходного изображения
     cv::Mat object_roi = src(bbox).clone();
 
-    if (!(j < COLOR_QTY)) {
+    if (!(output_limit < COLOR_QTY)) {
       continue;
     }
 
@@ -381,14 +333,15 @@ void sd::WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
           object_roi.cols > MIN_IMG_AX_SIZE)) {
       continue;
     }
-
-    cv::imwrite("output/" + std::to_string(i++) + ".jpg", object_roi);
+    cv::imwrite("output/" + std::to_string(output_imgs_cnt++) + ".jpg",
+                object_roi);
     // Вставляем объект в финальное изображение
+    std::cout << std::endl << i++ << std::endl;
     object_roi.copyTo(dst(bbox));
   }
 }
 
-void sd::SetColorMode(int clr_mode, int &h_min, int &h_max) {
+void sd::SetColorMode(int clr_mode, int& h_min, int& h_max) {
   switch (clr_mode) {
     case sd::RED:
       h_min = RED_MIN;

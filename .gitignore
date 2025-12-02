@@ -2,3 +2,5 @@
 .vscode
 build
 .cache
+install_d
+.clangd

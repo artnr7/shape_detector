@@ -8,20 +8,13 @@ endif
 
 default: r
 
-DATASETS := ../dataset
+DATASET := ../dataset/pedestrian.jpg
 
 install: 
 	@cmake --build build --target shape_detector --parallel $(NPROC)
 
-# run:
-# 	@cmake --build build --target shape_detector --parallel $(NPROC)
-# 	@cmake --build build --target run_shape_detector --parallel $(NPROC)
-
 run:
-# 	@./install_d/shape_detector $(DATASETS)/pedestrian.jpg
-# 	@./install_d/shape_detector $(DATASETS)/stop.jpg
-# 	@./install_d/shape_detector $(DATASETS)/many.jpg
-	@./install_d/shape_detector $(DATASETS)/arrow.jpg
+	@./install_d/shape_detector $(DATASET)
 
 r: clean output f install run
 
