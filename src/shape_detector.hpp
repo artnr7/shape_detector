@@ -49,12 +49,17 @@ enum clr { RED = 0, BLUE, YELLOW };
 #define MIN_IMG_AX_SIZE 100
 #define PAUSE 150  // milliseconds
 
+void proccessing_img(const std::string& filename, int app_mode);
+
+void MakeWindows(const std::string& main_win, const std::string& h_win,
+                 const std::string& s_win, const std::string& v_win,
+                 const std::string& hsv_chnls_sum_win,
+                 const std::string& edges_win, const std::string& mask_win);
+
 void ResizeWindows(const std::string& main_win, const std::string& h_win,
                    const std::string& s_win, const std::string& v_win,
                    const std::string& hsv_chnls_sum_win,
-                   const std::string& edges_win,
-                   const std::string& hsv_chnls_and_edges_sum_win,
-                   const std::string& mask_win);
+                   const std::string& edges_win, const std::string& mask_win);
 
 void ShowImages(const std::string& main_win, const cv::Mat& sign_detect_res_img,
                 const std::string& h_win, const std::string& s_win,
@@ -68,22 +73,20 @@ void ShowImages(const std::string& main_win, const cv::Mat& sign_detect_res_img,
 void MoveWindows(const std::string& main_win, const std::string& h_win,
                  const std::string& s_win, const std::string& v_win,
                  const std::string& hsv_chnls_sum_win,
-                 const std::string& edges_win,
-                 const std::string& hsv_chnls_and_edges_sum_win,
-                 const std::string& mask_win);
+                 const std::string& edges_win, const std::string& mask_win);
 
-void SetParams(cv::SimpleBlobDetector::Params& params);
-
-void ImgReadFirstFile(const char** argv, cv::Mat& img,
-                      const enum cv::ImreadModes& img_read_mode);
+void ChangeTrackbarsValues(int& h_min, int& h_max, int& s_min, int& s_max,
+                           int& v_min, int& v_max);
 
 void CreateTrackbars(const std::vector<cv::Mat>& channels,
                      const std::string& h_win, const std::string& s_win,
                      const std::string& v_win, int& h_min, int& h_max,
                      int& s_min, int& s_max, int& v_min, int& v_max);
 
-void ChangeTrackbarsValues(int& h_min, int& h_max, int& s_min, int& s_max,
-                           int& v_min, int& v_max);
+void ChannelsRangedCreate(const std::vector<cv::Mat>& channels,
+                          std::vector<cv::Mat>& channels_ranged);
+
+void SetColorMode(int& clr_mode, int& h_min, int& h_max);
 
 void ChannelsInRange(const std::vector<cv::Mat>& channels,
                      std::vector<cv::Mat>& channels_ranged, int h_min,
@@ -92,24 +95,14 @@ void ChannelsInRange(const std::vector<cv::Mat>& channels,
 void ChannelsSum(cv::Mat& hsv_bin_sum,
                  const std::vector<cv::Mat> channels_ranged);
 
-void MakeWindows(const std::string& main_win, const std::string& h_win,
-                 const std::string& s_win, const std::string& v_win,
-                 const std::string& hsv_chnls_sum_win,
-                 const std::string& edges_win,
-                 const std::string& hsv_chnls_and_edges_sum_win,
-                 const std::string& mask_win);
-
 void FillMask(std::vector<std::vector<cv::Point>>& contours,
-              std::vector<cv::Vec4i>& hierarchy, const cv::Mat& img,
-              cv::Mat& img_copy);
+              std::vector<cv::Vec4i>& hierarchy, const cv::Mat& src,
+              cv::Mat& mask);
 
-void ChannelsRangedCreate(const std::vector<cv::Mat>& channels,
-                          std::vector<cv::Mat>& channels_ranged);
 void SetColorizedMask(const cv::Mat& img, cv::Mat mask_img,
                       cv::Mat& clr_mask_img);
 
 void WriteContoursRect(const std::vector<std::vector<cv::Point>> contours,
                        const cv::Mat& src, int& i, int& j, cv::Mat& dst);
-void SetColorMode(int clr_mode, int& h_min, int& h_max);
 
 }  // namespace sd

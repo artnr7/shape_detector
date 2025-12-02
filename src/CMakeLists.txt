@@ -20,10 +20,9 @@ target_compile_options(${SHAPE_DETECTOR_APP} PRIVATE -Wall -Werror -Wextra)
 
 # target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE EDGES)
 # target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE HSV)
-# target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE HSV_PLUS_EDGES)
 # target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE MASK)
-target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE MODE_CONFIG)
-# target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE MODE_OUTPUT)
+# target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE MODE_CONFIG)
+target_compile_definitions(${SHAPE_DETECTOR_APP} PRIVATE MODE_OUTPUT)
 
 target_link_libraries(${SHAPE_DETECTOR_APP} ${OpenCV_LIBS})
 

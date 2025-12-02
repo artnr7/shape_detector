@@ -8,7 +8,7 @@ endif
 
 default: r
 
-DATASET := ../dataset/pedestrian.jpg
+DATASET := ../dataset/*
 
 install: 
 	@cmake --build build --target shape_detector --parallel $(NPROC)
